@@ -1,0 +1,40 @@
+/* Important this is the homepage which will show a login as well and other information
+So how are we going to organize all of the code */
+
+/* Registration Routines */
+
+If the registration form has been submitted 
+	Validate the data
+	Clean the data
+	Insert the data into a database
+	Verify the email
+	Display registration verification message
+	
+If the registration hasn't been submitted
+	Display the form
+	
+/***********************************/
+
+ValidateRegistrationFormData
+/* Routine for Validating Form Data */
+	Validate the username
+	Validate the email address 
+	Validate the password and password confirmation are the same
+End of ValidateRegistrationFormData	
+
+CleanRegistrationFormData
+/* Cleaning Data */
+	addslashes on all fields
+End of CleanRegistrationFormData
+
+CreateAccount
+	/* This inserts the registration data into the account table, creating an unverified account */
+	
+
+End of CreateAccount
+	
+	
+	
+	
+
+	

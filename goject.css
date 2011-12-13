@@ -1,0 +1,11 @@
+
+body{font-family:Arial;}
+h1{color:green;width:400px;}
+#registration_form{width:400px;border:1px solid green;}
+#registration_form p{padding:5px;}
+input[type="text"],input[type="password"]{float:right;padding:5px;}
+label{color:green;vertical-align:middle;}
+#login_form{width:400px;border:1px solid green;float:right;}
+#login_form p{padding:5px;}
+
+
