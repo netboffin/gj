@@ -1,0 +1,33 @@
+http://shiflett.org/blog/2006/jan/addslashes-versus-mysql-real-escape-string
+
+
+<?php
+ 
+$mysql = array();
+ 
+$db = mysqli_init();
+$db->real_connect('localhost', 'myuser', 'mypass', 'mydb');
+ 
+/* SQL Injection Example */
+$_POST['username'] = chr(0xbf) .
+                     chr(0x27) .
+                     ' OR username = username /*';
+$_POST['password'] = 'guess';
+ 
+$mysql['username'] = addslashes($_POST['username']);
+$mysql['password'] = addslashes($_POST['password']);
+ 
+$sql = "SELECT *
+        FROM   users
+        WHERE  username = '{$mysql['username']}'
+        AND    password = '{$mysql['password']}'";
+ 
+$result = $db->query($sql);
+ 
+if ($result->num_rows) {
+    /* Success */
+} else {
+    /* Failure */
+}
+ 
+?>

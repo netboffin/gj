@@ -24,3 +24,5 @@ bobby photography verified no.
 
 The password has to be compared with a hash.
 We need some test data to check if the login system works.
+
+**** Pseudocode ****

@@ -1,0 +1,130 @@
+<form name="loginform" id="loginform" action="<?php echo esc_url( site_url( 'wp-login.php', 'login_post' ) ); ?>" method="post">
+	<p>
+		<label for="user_login"><?php _e('Username') ?><br />
+		<input type="text" name="log" id="user_login" class="input" value="<?php echo esc_attr($user_login); ?>" size="20" tabindex="10" /></label>
+	</p>
+	<p>
+		<label for="user_pass"><?php _e('Password') ?><br />
+		<input type="password" name="pwd" id="user_pass" class="input" value="" size="20" tabindex="20" /></label>
+	</p>
+<?php do_action('login_form'); ?>
+	<p class="forgetmenot"><label for="rememberme"><input name="rememberme" type="checkbox" id="rememberme" value="forever" tabindex="90"<?php checked( $rememberme ); ?> /> <?php esc_attr_e('Remember Me'); ?></label></p>
+	<p class="submit">
+		<input type="submit" name="wp-submit" id="wp-submit" class="button-primary" value="<?php esc_attr_e('Log In'); ?>" tabindex="100" />
+<?php	if ( $interim_login ) { ?>
+		<input type="hidden" name="interim-login" value="1" />
+<?php	} else { ?>
+		<input type="hidden" name="redirect_to" value="<?php echo esc_attr($redirect_to); ?>" />
+<?php 	} ?>
+		<input type="hidden" name="testcookie" value="1" />
+	</p>
+</form>
+
+
+$action = isset($_REQUEST['action']) ? $_REQUEST['action'] : 'login';
+
+$errors = new WP_Error();
+
+if ( isset($_GET['key']) )
+	$action = 'resetpass';
+
+// validate action so as to default to the login screen
+if ( !in_array($action, array('logout', 'lostpassword', 'retrievepassword', 'resetpass', 'rp', 'register', 'login'), true) && false === has_filter('login_form_' . $action) )
+	$action = 'login';
+
+switch ($action) {
+
+case 'logout' :
+	check_admin_referer('log-out');
+	wp_logout();
+
+	$redirect_to = !empty( $_REQUEST['redirect_to'] ) ? $_REQUEST['redirect_to'] : 'wp-login.php?loggedout=true';
+	wp_safe_redirect( $redirect_to );
+	exit();
+
+break;
+
+case 'lostpassword' :
+case 'retrievepassword' :
+// other stuff
+
+
+login_footer('user_login');
+break;
+
+case 'login' :
+default:
+	$secure_cookie = '';
+	$interim_login = isset($_REQUEST['interim-login']);
+
+	// If the user wants ssl but the session is not ssl, force a secure cookie.
+	if ( !empty($_POST['log']) && !force_ssl_admin() ) {
+		$user_name = sanitize_user($_POST['log']);
+		if ( $user = get_user_by('login', $user_name) ) {
+			if ( get_user_option('use_ssl', $user->ID) ) {
+				$secure_cookie = true;
+				force_ssl_admin(true);
+			}
+		}
+	}
+
+	if ( isset( $_REQUEST['redirect_to'] ) ) {
+		$redirect_to = $_REQUEST['redirect_to'];
+		// Redirect to https if user wants ssl
+		if ( $secure_cookie && false !== strpos($redirect_to, 'wp-admin') )
+			$redirect_to = preg_replace('|^http://|', 'https://', $redirect_to);
+	} else {
+		$redirect_to = admin_url();
+	}
+
+	$reauth = empty($_REQUEST['reauth']) ? false : true;
+
+	// If the user was redirected to a secure login form from a non-secure admin page, and secure login is required but secure admin is not, then don't use a secure
+	// cookie and redirect back to the referring non-secure admin page.  This allows logins to always be POSTed over SSL while allowing the user to choose visiting
+	// the admin via http or https.
+	if ( !$secure_cookie && is_ssl() && force_ssl_login() && !force_ssl_admin() && ( 0 !== strpos($redirect_to, 'https') ) && ( 0 === strpos($redirect_to, 'http') ) )
+		$secure_cookie = false;
+
+	$user = wp_signon('', $secure_cookie);
+
+	$redirect_to = apply_filters('login_redirect', $redirect_to, isset( $_REQUEST['redirect_to'] ) ? $_REQUEST['redirect_to'] : '', $user);
+
+	if ( !is_wp_error($user) && !$reauth ) {
+		if ( $interim_login ) {
+			$message = '<p class="message">' . __('You have logged in successfully.') . '</p>';
+			login_header( '', $message ); ?>
+			<script type="text/javascript">setTimeout( function(){window.close()}, 8000);</script>
+			<p class="alignright">
+			<input type="button" class="button-primary" value="<?php esc_attr_e('Close'); ?>" onclick="window.close()" /></p>
+			</div></body></html>
+<?php		exit;
+		}
+
+		if ( ( empty( $redirect_to ) || $redirect_to == 'wp-admin/' || $redirect_to == admin_url() ) ) {
+			// If the user doesn't belong to a blog, send them to user admin. If the user can't edit posts, send them to their profile.
+			if ( is_multisite() && !get_active_blog_for_user($user->ID) && !is_super_admin( $user->ID ) )
+				$redirect_to = user_admin_url();
+			elseif ( is_multisite() && !$user->has_cap('read') )
+				$redirect_to = get_dashboard_url( $user->ID );
+			elseif ( !$user->has_cap('edit_posts') )
+				$redirect_to = admin_url('profile.php');
+		}
+		wp_safe_redirect($redirect_to);
+		exit();
+	}
+
+ grep -ril "sanitize_user(" ./
+./wp-includes/pluggable.php
+./wp-includes/user.php
+./wp-includes/ms-functions.php
+./wp-includes/formatting.php
+./wp-includes/capabilities.php
+./wp-admin/includes/user.php
+./wp-admin/install.php
+./wp-admin/user-new.php
+./wp-login.php
+
+
+
+
+

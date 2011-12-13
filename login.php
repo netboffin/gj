@@ -17,6 +17,9 @@
 	
 	while($row = mysql_fetch_array($result))
 	{
+		/* Is this the right way to deal with the login
+		 * There should be an example somewhere.
+		 */
 		if($row["AccountVerified"])
 		{
 			print "<p>".$row["AccountVerified"]."</p>";
