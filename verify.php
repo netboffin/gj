@@ -1,6 +1,6 @@
 <?php 
 	// Get the email and hash from the url
-	$email = addslashes($_GET["email"]);
+	$username = addslashes($_GET["username"]);
 	$hash  = addslashes($_GET["hash"]);
 	echo "before connection";
 	// Connect to the database
@@ -11,9 +11,10 @@
 	echo "after select_db";
 	$email = mysql_escape_string($email);
 	
-	$query = "update account set AccountVerified = true where AccountEmail = '$email' and AccountPasswrd='$hash'";
+	$query = "update account set AccountVerified = true where AccountUsername = '$username' and AccountPasswrd='$hash'";
 	$result = mysql_query($query)or die("Query returned : ".mysql_error());
 	mysql_close($db);
-	echo "Congratulations your account has been registered";
 	
+	echo "Congratulations your account has been registered. You're now logged in.Visit your account.";	
 ?>
+<a href="http://www.netboffin.co.uk/gj/projects.php?username=<?=$username?>&hash=<?=$hash?>">Visit your account</a>

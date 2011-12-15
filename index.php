@@ -36,7 +36,7 @@ function  process_form(){
 			$db_selected = mysql_select_db("netboffi_goject") or die("Can't connect to goject :".mysql_error());
 			$query = "insert into account values(NULL,'$username','$email','$hash',false,NOW())";
 			$result = mysql_query($query) or die("Query failed".mysql_error());	
-			print "Account Registered";
+			print "Account Registered. We sent you an email. Please click on the link in the email to verify your account.";
 			mysql_close();			
 		}
 		sendVerificationEmail($username,$email,$passwrd,$hash);
@@ -48,22 +48,25 @@ function  process_form(){
 	}
 }
 function display_form(){
-        ?>       <form name="login_form" id="login_form" action='login.php' method="post">
-	      <p><label for="username"> Username : </label> <input id="username" type="text" name ="username"/></p>
-          <p><label for="password"> Password : </label><input type="password" name="password"/></p>
-          <!-- <input type ="hidden" value="<?=$token?>" /> -->
-		  <input type="hidden" name="stage" value="process"/>
-		 <p><input type="submit" value ="Log In"/></p>
+        ?>    
+        <form name="login_form" id="login_form" action='login.php' method="post">
+	    <p><label for="username"> Username : </label> <input id="username" type="text" name ="username"/></p>
+        <p><label for="password"> Password : </label><input type="password" name="password"/>
+        	<a href="password_reminder.php">Lost your password</a>
+        	
+        </p>
+        <!-- <input type ="hidden" value="<?=$token?>" /> -->
+		<input type="hidden" name="stage" value="process"/>
+		<p><input type="submit" value ="Log In"/></p>
         </form>   
+        
 		<form name="Registration_Form" id="registration_form" action='<?=$_SERVER["PHP_SELF"]?>' method="post">
-	
-          <p>  <label for="username"> Username : </label> <input id="username" type="text" name ="username"/></p>
-           <p> <label for="email"> Email :</label> <input id="email" type="text" name="email"/></p>
-           <p> <label for="password"> Password : </label><input type="password" name="password"/></p>
-            <p><label for="password_confirmation"> Confirm Password :</label> <input type ="password" name ="password_confirmation"/></p>
-            <!-- <input type ="hidden" value="<?=$token?>" /> -->
-			<input type="hidden" name="stage" value="process"/>			
-            <p><input type="submit" value ="Sign Up!"/></p>
+	    <p><label for="username">Username : </label> <input id="username" type="text" name ="username"/></p>
+        <p> <label for="email">Email : </label> <input id="email" type="text" name="email"/></p>
+        <p> <label for="password">Password : </label><input type="password" name="password"/></p>
+        <p><label for="password_confirmation">Confirm Password :</label> <input type ="password" name ="password_confirmation"/></p>
+       	<input type="hidden" name="stage" value="process"/>			
+        <p><input type="submit" value ="Sign Up!"/></p>
         </form>
       
 <?php
@@ -85,9 +88,9 @@ function sendVerificationEmail($username,$email,$password,$hash){
      
     Please click this link to activate your account: 
      
-    http://www.netboffin.co.uk/gj/verify.php?email='.$email.'&hash='.$hash.' 
+    http://www.netboffin.co.uk/gj/verify.php?username='.$username.'&hash='.$hash
      
-    '; // Our message above including the link  
+    ; // Our message above including the link  
       
     $headers = 'From:admin@goject.com' . "\r\n"; // Set from headers  
     mail($to, $subject, $message, $headers); // Send our email  
