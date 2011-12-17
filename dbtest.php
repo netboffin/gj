@@ -10,7 +10,7 @@ foreach($configsettings as $key => $value)
 print "<p>*********************</p>";
 
 // data source name or data connection string
-$dsn = "mysql://netboffi:l2315793014@localhost/netboffi_goject";
+$dsn = "mysql://".$configsettings["username"].":".$configsettings['password']."@localhost/netboffi_goject";
 
 // connect and create data base handle
 $dbh = DB::connect($dsn);

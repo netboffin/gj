@@ -2,8 +2,6 @@
 <html>
 <head><title>Goject Password Reminder</title></head>
 <body>
-
-
 <?php 
 if(isset($_POST["stage"]) && ($_POST["stage"]=='process'))
 {
@@ -33,11 +31,11 @@ function process_password_reset_form(){
 	{
 		print_r($rows);
 		$emailAddress = $rows["AccountEmail"];
-		$new_password = md5(uniqid(rand(),TRUE));
+		$new_password = uniqid(rand(),TRUE);
 		$salt = "Mick";
 		$passwordandhash = $new_password.$salt;
 		$hash = md5($passwordandhash);
-		$query2 = "update account set AccountPassword = '$hash'";		
+		$query2 = "update account set AccountPasswrd = '$hash'";		
 		mysql_query($query2)or die("<p>Couldn't update account password ".mysql_error());
 		mail($emailAddress,"Password Reset Here's your new password",$new_password);
 		print "Your new password has been sent to".$emailAddress;
