@@ -37,10 +37,8 @@ function process_password_reset_form(){
 		$salt = "Mick";
 		$passwordandhash = $new_password.$salt;
 		$hash = md5($passwordandhash);
-		$query2 = "update account set AccountPassword = '$hash'";
-		
+		$query2 = "update account set AccountPassword = '$hash'";		
 		mysql_query($query2)or die("<p>Couldn't update account password ".mysql_error());
-		
 		mail($emailAddress,"Password Reset Here's your new password",$new_password);
 		print "Your new password has been sent to".$emailAddress;
 	}	
