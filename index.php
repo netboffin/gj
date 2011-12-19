@@ -7,6 +7,9 @@
         <link rel="stylesheet" href="goject.css" type="text/css"/>      
 </head>
     <body>
+    <?php 
+    	print_r(PDO::getAvailableDrivers());
+    ?> 
 	<h1>Goject Project Management Registration</h1>
 <?php
 if(isset($_POST["stage"])  and  ($_POST["stage"] == "process")){
