@@ -18,19 +18,24 @@ class db{
 			echo "I'm sorry, Dave. I'm afraid I can't do that.";  
    			file_put_contents('PDOErrors.txt', $e->getMessage(), FILE_APPEND);  
 			print $e->getMessage();
-		}
-		
-	}    
-
-    	/*
-    	 * The database handle $dbh is declared as static so we can connect to a database without instantiating a 
+		}		
+	}     	/*
+    	  
+    	  The database handle $dbh is declared as static so we can connect to a database without instantiating a 
 			new database object we can do 
-
+			
 			db::$dbh
- 
-		rather than :
+			
+			If a class is a subclass of this class we would access it thus :
+			self::$dbh
+			
+			we could say if(!self::$dbh) $this->connect();
+			 
+			rather than :
+			
 			$db = new db();
 			$db->connect();
+    	
     	*/
     	
 }
